@@ -1,0 +1,361 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{caption}
+
+\geometry{a4paper, margin=1in}
+
+\title{\textbf{Week 2: Signal Understanding and Biomedical Interpretation of Pediatric ECG Signals}\\[0.5em]
+\large Explainable AI-Based Detection of Pediatric Cardiovascular Diseases Using Multi-Lead ECG Signals}
+\author{[Author Placeholder] \\ [Institution Placeholder] \\ [Project/Lab Placeholder]}
+\date{[Date Placeholder]}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Pediatric electrocardiogram (ECG) interpretation presents unique challenges due to developmental age-dependent morphology and specialized acquisition protocols. This report documents the Week 2 Signal Understanding and Biomedical Interpretation phase of an Explainable AI-based pediatric cardiovascular disease project utilizing the ZZU pECG dataset. The objective of this phase was to establish qualitative biomedical intuition regarding multi-lead pediatric ECG signals prior to the application of quantitative feature extraction or deep learning. By employing a rigorous verification framework, illustrative CVD-labelled and Non-CVD-labelled records were systematically examined in standard WFDB format. The analysis highlights critical distinctions between clinical disease labels and instantaneous ECG diagnostic statements, the necessity of age-aware waveform interpretation, and the structural implications of 9-lead versus 12-lead pediatric acquisition protocols. The qualitative findings reported herein confirm the visibility of organized waveform structure while establishing strict scientific boundaries against over-interpreting isolated case studies, providing the empirical foundation for automated quantitative feature extraction in Week 3.
+\end{abstract}
+
+\section{Introduction}
+The electrocardiogram (ECG) is a fundamental, non-invasive diagnostic tool for evaluating cardiac electrical activity. While extensive research has focused on adult ECG analysis, pediatric ECG interpretation remains a specialized and complex domain \cite{Tan2025}. The morphological characteristics of pediatric ECG signals vary significantly as children undergo rapid developmental changes, meaning criteria established for adult pathology often do not apply \cite{Tan2025}. Consequently, developing Explainable Artificial Intelligence (XAI) for pediatric cardiovascular diseases requires a foundational understanding of these signals before complex modeling is attempted. 
+
+This report details the Week 2 signal-understanding phase. The objective is to empirically document the information visibly present in pediatric multi-lead ECGs, how waveform morphology differs across leads, and what can be responsibly inferred from qualitative visual inspection. Establishing this qualitative biomedical intuition is a necessary prerequisite to ensure that subsequent quantitative feature extraction (Week 3) and deep learning models (Week 4) remain grounded in physiological reality.
+
+\section{Background}
+
+\subsection{Pediatric ECG Interpretation}
+Pediatric ECG interpretation differs substantially from adult interpretation. As the pediatric heart develops and chest anatomy changes, expected heart rates and normal waveform amplitudes evolve. For example, infants and toddlers typically present with significantly higher resting heart rates and often demonstrate higher baseline QRS voltages due to thinner chest walls and different ventricular mass ratios compared to adults \cite{Tan2025}. Consequently, age must always contextualize pediatric ECG analysis.
+
+\subsection{ECG Waveform Components}
+The cardiac cycle produces distinct electrical signatures. In a standard assessment:
+\begin{itemize}
+    \item \textbf{P wave:} Represents atrial depolarization, initiated by the sinoatrial (SA) node.
+    \item \textbf{QRS complex:} Represents ventricular depolarization, typically demonstrating the largest amplitude in the cycle.
+    \item \textbf{T wave:} Represents ventricular repolarization.
+\end{itemize}
+These physiological components provide the structural basis for evaluating cardiac rhythm and electrophysiology.
+
+\subsection{Multi-Lead Representation}
+A standard ECG utilizes multiple leads to capture cardiac electrical activity from different spatial vectors. Limb leads (I, II, III) and augmented leads (aVR, aVL, aVF) capture electrical activity in the frontal plane. Precordial chest leads (V1--V6) capture activity in the horizontal plane. Analyzing multiple leads is essential because physiological or pathological abnormalities may only project prominently onto specific spatial axes.
+
+\section{Dataset Context}
+
+\subsection{ZZU pECG Dataset}
+This project utilizes the ZZU pECG dataset, a large-scale database containing 14,190 ECG records from 11,643 unique pediatric patients \cite{Tan2025}. The data was acquired at the First Affiliated Hospital of Zhengzhou University. The recordings encompass varying durations and utilize a standard 500 Hz sampling frequency (Table~\ref{tab:dataset_context}).
+
+\begin{table}[htbp]
+    \centering
+    \caption{ZZU pECG Dataset Context \cite{Tan2025}}
+    \begin{tabular}{lr}
+        \toprule
+        \textbf{Metric} & \textbf{Value} \\
+        \midrule
+        Unique children & 11,643 \\
+        ECG records & 14,190 \\
+        12-lead records & 12,334 \\
+        9-lead records & 1,856 \\
+        Sampling frequency & 500 Hz \\
+        Recording duration & 5--120 s \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:dataset_context}
+\end{table}
+
+\subsection{Acquisition and Population Context}
+Crucially, the records in this dataset originate from a hospitalized pediatric population rather than the general healthy population \cite{Tan2025}. Therefore, records are categorized strictly as ``CVD-labelled'' or ``Non-CVD-labelled'' based on the provided clinical metadata. The absence of a cardiovascular disease (CVD) label does not definitively establish that the patient is ``healthy,'' only that a CVD diagnosis is not present in the supplied metadata. 
+
+\subsection{Pediatric Age Representation}
+In accordance with pediatric clinical conventions, age is retained and reported in days. The dataset defines pediatric subjects as 14 years of age or younger \cite{Tan2025}.
+
+\subsection{9-Lead and 12-Lead Configurations}
+The dataset contains both standard 12-lead and modified 9-lead configurations. As documented by Tan et al. \cite{Tan2025}, placing all six precordial leads can be physically challenging on young children due to smaller torso sizes. Consequently, for children under 7 years old, a 9-lead configuration (I, II, III, aVR, aVL, aVF, V1, V3, V5) is systematically employed as a practical substitute. This structural variance must be accommodated during analytical comparisons.
+
+\section{Data Representation and WFDB}
+The ECG records are stored in the Waveform Database (WFDB) format, comprising two components:
+\begin{itemize}
+    \item \texttt{.hea}: A header file containing critical metadata, including sampling frequency, lead configuration, physical units, and patient demographics.
+    \item \texttt{.dat}: A binary file containing the digitized ECG waveform.
+\end{itemize}
+Both files are requisite for analysis. Python's \texttt{wfdb} library parses these files into a two-dimensional array representing (samples $\times$ leads), facilitating direct visualization and extraction of the physical signal in millivolts (mV).
+
+\section{Week 2 Methodology}
+The Week 2 signal-understanding methodology progressed through strict verification and visualization stages (Figure~\ref{fig:workflow}). 
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{
+        \parbox[c][6cm][c]{0.9\textwidth}{
+            \centering
+            \textbf{FIGURE PLACEHOLDER}\\[0.5em]
+            Insert Week 2 Workflow Diagram here.
+        }
+    }
+    \caption{Week 2 workflow from record selection and computational verification through qualitative signal inspection and structured biomedical interpretation.}
+    \label{fig:workflow}
+\end{figure}
+
+The steps executed were:
+\begin{enumerate}
+    \item \textbf{Record Selection:} Identification of two illustrative candidate records.
+    \item \textbf{Metadata Verification:} Cross-referencing CSV metadata with corresponding ICD-10 and AHA ECG diagnostic codes.
+    \item \textbf{Header Verification:} Computationally asserting agreement between CSV metadata and the WFDB \texttt{.hea} file parameters.
+    \item \textbf{Signal Integrity Check:} Ensuring the arrays were free from corruption (NaN/Inf values) and bound by realistic physiological voltages.
+    \item \textbf{Signal-Quality Inspection:} Qualitative visual assessment of artifacts.
+    \item \textbf{Lead II Visualization:} Side-by-side amplitude comparison on a shared temporal scale.
+    \item \textbf{Multi-Lead Visualization:} Comparison restricted strictly to shared common leads.
+    \item \textbf{Zoomed Morphology:} Manual selection of a representative cardiac cycle for qualitative P/QRS/T annotation.
+\end{enumerate}
+
+\section{Record Selection}
+Two candidate records were selected to illustrate pediatric ECG characteristics: \texttt{P00001\_E01} (CVD-labelled) and \texttt{P00028\_E01} (Non-CVD-labelled). As emphasized in Section 3.2, the terminology CVD-labelled and Non-CVD-labelled is utilized rather than ``diseased'' or ``healthy'' to reflect the hospitalized nature of the cohort and the metadata-driven classification.
+
+\section{Data and Signal Verification}
+Prior to visualization, the metadata for both candidate records was computationally verified (Table~\ref{tab:metadata_verification}). The analysis confirmed the presence of the files, matched the ICD-10 and AHA codes to textual descriptions, and verified that the WFDB header agreed with the dataset metadata regarding sampling frequency (500 Hz), total sampling points, and lead configurations. 
+
+\begin{table}[htbp]
+    \centering
+    \caption{Selected Record Metadata Verification}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Property} & \textbf{CVD-Labelled} & \textbf{Non-CVD-Labelled} \\
+        \midrule
+        Record ID & P00001\_E01 & P00028\_E01 \\
+        Patient ID & P00001 & P00028 \\
+        Age (days) & 572 & 786 \\
+        Gender & Female & Female \\
+        CVD Label & Yes & No \\
+        ICD-10 Code & Q21.0 & Q66.0 \\
+        Disease Description & Ventricular septal defect & Talipes equinovarus \\
+        ECG Diagnostic Statement & Left ventricular high voltage & Normal ECG \\
+        Lead Configuration & 9 & 12 \\
+        Sampling Frequency & 500 Hz & 500 Hz \\
+        Duration & 21.00 seconds & 17.00 seconds \\
+        \bottomrule
+    \end{tabular}
+    }
+    \label{tab:metadata_verification}
+\end{table}
+
+A subsequent integrity check verified the loaded arrays contained no \texttt{NaN} or \texttt{Inf} values and possessed valid physical boundaries in mV (Table~\ref{tab:signal_verification}).
+
+\begin{table}[htbp]
+    \centering
+    \caption{WFDB Signal Integrity Verification}
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Property} & \textbf{CVD-Labelled} & \textbf{Non-CVD-Labelled} \\
+        \midrule
+        Array Shape & (10500, 9) & (8500, 12) \\
+        Signal Units & mV & mV \\
+        NaN Count & 0 & 0 \\
+        Inf Count & 0 & 0 \\
+        Integrity Status & Passed & Passed \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:signal_verification}
+\end{table}
+
+\section{Signal Visualization}
+
+\subsection{Signal Quality Inspection}
+Visual signal quality inspection was conducted over a 5-second interval of Lead II (Figure~\ref{fig:sqi}). The qualitative inspection assessed baseline wander, high-frequency noise, abrupt discontinuities, clipping, and signal dropout. No arbitrary filtering or quality thresholds were applied to artificially exclude data. 
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{
+        \parbox[c][6cm][c]{0.9\textwidth}{
+            \centering
+            \textbf{FIGURE PLACEHOLDER}\\[0.5em]
+            Insert Week 2 Signal Quality Check plot here.
+        }
+    }
+    \caption{Visual signal-quality inspection of a 5-second Lead II segment for both records, illustrating baseline variation, noise, artifacts, and waveform visibility.}
+    \label{fig:sqi}
+\end{figure}
+
+\subsection{Lead II Comparison}
+Lead II is conventionally utilized for qualitative rhythm and basic morphological assessment. Figure~\ref{fig:leadII_comparison} illustrates a 5-second interval for both records. A data-derived common y-axis range was computationally applied to ensure fair amplitude comparisons, deliberately avoiding arbitrary scaling that could mask physiological differences.
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{
+        \parbox[c][6cm][c]{0.9\textwidth}{
+            \centering
+            \textbf{FIGURE PLACEHOLDER}\\[0.5em]
+            Insert Week 2 Lead II Comparison (Figure 1) here.
+        }
+    }
+    \caption{Side-by-side comparison of the Lead II ECG traces for the selected CVD-labelled and Non-CVD-labelled pediatric records over the same time interval in seconds, maintaining a comparable physical amplitude scale (mV).}
+    \label{fig:leadII_comparison}
+\end{figure}
+
+\subsection{Multi-Lead Comparison}
+ECG morphology varies across spatial vectors. Because the CVD-labelled record utilizes a 9-lead configuration and the Non-CVD-labelled record utilizes a 12-lead configuration, direct comparison was explicitly restricted to the 9 common leads (I, II, III, aVR, aVL, aVF, V1, V3, V5) as shown in Figure~\ref{fig:multilead_comparison}. No artificial interpolation, zero filling, or waveform reconstruction was performed for the structurally absent precordial leads.
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{
+        \parbox[c][6cm][c]{0.9\textwidth}{
+            \centering
+            \textbf{FIGURE PLACEHOLDER}\\[0.5em]
+            Insert Week 2 Multi-Lead Comparison (Figure 2) here.
+        }
+    }
+    \caption{Multi-lead comparison restricted to the 9 common leads available in both candidate records. Direct comparison is restricted to common leads because the CVD-labelled record uses the 9-lead pediatric acquisition protocol.}
+    \label{fig:multilead_comparison}
+\end{figure}
+
+\subsection{Additional Precordial Leads}
+The supplementary precordial leads (V2, V4, V6) uniquely present in the 12-lead Non-CVD-labelled record are documented separately for completeness (Figure~\ref{fig:extra_leads}) but were explicitly excluded from direct comparative analysis.
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{
+        \parbox[c][6cm][c]{0.9\textwidth}{
+            \centering
+            \textbf{FIGURE PLACEHOLDER}\\[0.5em]
+            Insert Week 2 Additional Leads here.
+        }
+    }
+    \caption{Supplementary precordial leads (V2, V4, V6) present only in the 12-lead Non-CVD-labelled record. These leads are descriptive and are NOT used for direct between-record comparison.}
+    \label{fig:extra_leads}
+\end{figure}
+
+\subsection{Zoomed P-QRS-T Morphology}
+To examine fundamental electrophysiology, 0.6-second representative intervals were manually selected through visual inspection for maximal waveform visibility (Figure~\ref{fig:zoomed_pqrst}). These selected windows are intended for educational visualization and are not claimed to represent quantitatively optimal or disease-characteristic cardiac cycles.
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{
+        \parbox[c][6cm][c]{0.9\textwidth}{
+            \centering
+            \textbf{FIGURE PLACEHOLDER}\\[0.5em]
+            Insert Week 2 Zoomed P-QRS-T Morphology (Figure 3) here.
+        }
+    }
+    \caption{Zoomed visualization of manually selected representative cardiac cycles. The P, QRS, and T landmarks are approximate educational annotations, not precise automated fiducial measurements.}
+    \label{fig:zoomed_pqrst}
+\end{figure}
+
+\section{Biomedical Observations}
+Biomedical findings were strictly categorized using an \textbf{Observation $\rightarrow$ Interpretation $\rightarrow$ Limitation} framework (Table~\ref{tab:observation_framework}) to prevent analytical overreach.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Week 2 Structured Observation Framework}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{p{0.15\textwidth} p{0.25\textwidth} p{0.25\textwidth} p{0.3\textwidth}}
+        \toprule
+        \textbf{Domain} & \textbf{Observation} & \textbf{Interpretation} & \textbf{Limitation} \\
+        \midrule
+        \textbf{Rhythm} & Both Lead II traces exhibit relatively regular repeating complexes over the displayed interval. & The relatively regular R-R pattern is visually compatible with an organized rhythm. & Determining sinus rhythm requires assessing P-wave morphology and atrioventricular relationships beyond qualitative visual inspection. \\
+        \addlinespace
+        \textbf{Amplitude} & The illustrative CVD-labelled record shows visually larger QRS amplitudes in several common leads. & Consistent with the ECG diagnostic statement reporting `left ventricular high voltage'. & Visual inspection cannot determine whether voltage meets pediatric criteria for hypertrophy or attribute it to the clinical diagnosis. \\
+        \addlinespace
+        \textbf{P Wave} & Upright P waves prior to QRS are visible in Lead II. & The morphology is compatible with atrial depolarization. & Precise onset/offset locations and SA-node origin cannot be definitively proven visually. \\
+        \addlinespace
+        \textbf{QRS} & Distinct ventricular depolarization complexes are visible in all leads, with varying polarity based on spatial vector. & Polarity variation (e.g., upright in II, inverted in aVR) correctly reflects spatial electrical propagation. & Lack of automated duration measurement precludes identification of conduction delays. \\
+        \addlinespace
+        \textbf{T Wave} & Upright T waves following QRS are visible in Lead II. & The morphology is consistent with ventricular repolarization. & Subtle repolarization abnormalities require precise measurement and cannot be definitively excluded visually. \\
+        \addlinespace
+        \textbf{ST Segment} & No obvious large ST-segment displacement is visually apparent. & Gross ST segment appears generally isoelectric in the selected window. & Subtle ST-segment abnormalities cannot be reliably excluded through qualitative inspection. \\
+        \addlinespace
+        \textbf{Quality} & Waveforms are continuous with visible baseline variation but no major dropout. & Signals contain sufficiently visible waveform structure for qualitative inspection. & Minor artifacts and baseline variation remain present without filtering. \\
+        \bottomrule
+    \end{tabular}
+    }
+    \label{tab:observation_framework}
+\end{table}
+
+\section{Clinical Label vs. ECG Diagnostic Statement}
+A critical conceptual distinction identified in this analysis is the separation of clinical disease diagnoses from instantaneous ECG diagnostic statements (Figure~\ref{fig:clinical_vs_ecg}). 
+
+\begin{figure}[htbp]
+    \centering
+    \fbox{
+        \parbox[c][6cm][c]{0.9\textwidth}{
+            \centering
+            \textbf{FIGURE PLACEHOLDER}\\[0.5em]
+            Clinical disease label $\rightarrow$ ECG diagnostic statement $\rightarrow$ Raw ECG waveform $\rightarrow$ Visual observation
+        }
+    }
+    \caption{Conceptual framework separating clinical metadata from instantaneous waveform characteristics, illustrating that different sources yield distinct diagnostic representations.}
+    \label{fig:clinical_vs_ecg}
+\end{figure}
+
+As documented by the dataset authors \cite{Tan2025}, an ECG is a transient electrophysiological measurement. A patient with a confirmed CVD diagnosis (e.g., Ventricular Septal Defect) may yield a normal ECG diagnostic statement, while conversely, abnormal ECG characteristics do not independently prove a specific clinical diagnosis. Therefore:
+\begin{itemize}
+    \item A CVD-labelled patient may not exhibit an obvious electrical abnormality in one isolated recording.
+    \item A visually unusual waveform feature does not independently establish a clinical diagnosis.
+    \item Visual observations (e.g., increased QRS amplitude) must be distinguished from proven diagnoses (e.g., left ventricular hypertrophy).
+\end{itemize}
+This epistemological distinction is paramount for the subsequent development of reliable XAI methodologies.
+
+\section{Pediatric Interpretation Context}
+Pediatric developmental age is an essential consideration when interpreting ECG morphology and heart rate. The selected candidate records represent children aged 572 days and 786 days. In this context:
+\begin{itemize}
+    \item \textbf{Heart Rate:} Age is an important consideration when interpreting pediatric heart rate because normal resting heart-rate ranges differ across developmental stages.
+    \item \textbf{Amplitude:} ECG voltage in children is influenced by developmental age, body habitus, cardiac anatomy, and electrode placement \cite{Tan2025}. 
+\end{itemize}
+Consequently, voltage observations must be interpreted using pediatric rather than adult reference criteria, and age remains a persistent confounding variable in direct visual comparisons.
+
+\section{Scientific Limitations}
+The observations detailed in this report are bound by explicit scientific limitations:
+\begin{enumerate}
+    \item \textbf{Sample Size:} The analysis is an illustrative $N=2$ case study and cannot support population-level conclusions.
+    \item \textbf{Confounding:} Potential confounding by age differences and varied lead configurations precludes direct causative claims.
+    \item \textbf{Structural Incompleteness:} Differences between 9-lead and 12-lead configurations limit comprehensive precordial comparisons.
+    \item \textbf{Subjectivity:} Manual representative-window selection and visual morphological assessment are inherently subjective.
+    \item \textbf{Lack of Automation:} No automated fiducial detection or quantitative measurement of intervals or voltages was performed.
+    \item \textbf{Lack of Reference Criteria:} The qualitative inspection lacks age-adjusted quantitative reference criteria.
+    \item \textbf{Population Context:} The dataset represents a hospitalized pediatric population \cite{Tan2025}, not the general population.
+\end{enumerate}
+
+\section{What Week 2 Established}
+Week 2 successfully established a reproducible, qualitative framework for understanding pediatric ECG signals. The analysis demonstrated:
+\begin{itemize}
+    \item Successful extraction and technical verification of raw WFDB ECG records and headers.
+    \item The structural distinction between 9-lead and 12-lead configurations and methods for mitigating missing leads.
+    \item Practical methodologies for visually inspecting signal quality and basic waveform morphology (P, QRS, T).
+    \item The critical requirement to incorporate pediatric developmental age during interpretation.
+    \item The vital conceptual boundary separating clinical disease labels from waveform appearances.
+\end{itemize}
+
+\section{What Week 2 Did Not Establish}
+Conversely, Week 2 did \textit{not} establish:
+\begin{itemize}
+    \item Any diagnosis derived from visual inspection alone.
+    \item Any population-level disease morphology patterns from the $N=2$ illustrative comparison.
+    \item Disease-specific ECG biomarkers or diagnostic criteria.
+    \item Causal relationships (e.g., proof that increased voltage in the selected record was caused by VSD).
+    \item That one specific lead is diagnostically superior to others.
+\end{itemize}
+
+\section{Transition to Week 3}
+The signal understanding established in Week 2 provides the foundation for the next analytical phase:
+\begin{verbatim}
+Dataset understanding (Week 1)
+        ↓
+Qualitative signal understanding (Week 2)
+        ↓
+Quantitative biomedical feature extraction (Week 3)
+\end{verbatim}
+Having verified the qualitative structures of the pediatric ECG waveforms, Week 3 will transition from approximate visual inspection to precise, automated extraction. Planned candidate features for exploration include heart rate, R-R intervals, and QRS duration. These quantitative metrics will eventually serve as the basis for algorithmic modeling.
+
+\section{Reproducibility}
+The results documented in this report were generated using Python within a localized virtual environment, relying on \texttt{wfdb}, \texttt{pandas}, \texttt{numpy}, and \texttt{matplotlib}. The methodology is documented computationally in \texttt{./Notebooks/Week2/Week2\_Signal\_Understanding.ipynb}. The dataset comprises the open-access ZZU pECG database \cite{Tan2025} sourced from WFDB format.
+
+\bibliographystyle{plain}
+\bibliography{Week2_Signal_Understanding_Report}
+
+\end{document}
