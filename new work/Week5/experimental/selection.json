@@ -1,0 +1,10 @@
+{
+  "winner": "multiscale_resnet",
+  "winner_checkpoint": "/home/souhit/Documents/Research/Pediatric_ECG/NoteBooks/Week5/experimental/multiscale_resnet_best.pth",
+  "criterion": "highest validation AP among experimental candidates; ties sensitivity then AUROC",
+  "broad_gain_over_week5_unweighted_resnet": true,
+  "broad_gain_rule": "AP higher; AUROC, sensitivity, F1 no lower; specificity >=0.5",
+  "validation_only": true,
+  "test_evaluated": false,
+  "interpretation": "Directional validation rule passed, but AP/AUROC differences are small with descriptive patient-bootstrap intervals spanning zero; sensitivity increases with lower specificity and uneven subgroup effects."
+}

@@ -1,0 +1,4 @@
+Phase 2 Best Epoch: 18
+Phase 2 Best Validation ROC-AUC: 0.8417
+Phase 2 Validation PR-AUC at Best Epoch: 0.9582
+Phase 1 vs Phase 2 Delta (ROC-AUC): 0.0036

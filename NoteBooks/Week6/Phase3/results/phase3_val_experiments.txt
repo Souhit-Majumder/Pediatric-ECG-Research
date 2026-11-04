@@ -1,0 +1,17 @@
+==================================================
+PHASE 3 CONFIGURATION EXPERIMENTS (Validation Set)
+==================================================
+
+Model: Phase 2 ResNet-1D (No retraining)
+Checkpoint Used: /home/souhit/Documents/Research/Pediatric_ECG/NoteBooks/Week6/Phase2/checkpoints/phase2_resnet_best.pth
+
+Windows    | Aggregation  | ROC-AUC    | PR-AUC     | Runtime (s)
+-----------------------------------------------------------------
+1          | MEAN         | 0.8417     | 0.9582     | 2.79
+3          | MEAN         | 0.8479     | 0.9594     | 4.69
+3          | MAX          | 0.8505     | 0.9611     | 4.41
+5          | MEAN         | 0.8479     | 0.9594     | 5.89
+5          | MAX          | 0.8511     | 0.9614     | 5.78
+-----------------------------------------------------------------
+
+Best Configuration: 5 Windows, MAX Aggregation (ROC-AUC: 0.8511)

@@ -1,0 +1,3 @@
+Experiment B Best Epoch: 14
+Experiment B Validation ROC-AUC: 0.8418
+Experiment B Validation PR-AUC: 0.9586

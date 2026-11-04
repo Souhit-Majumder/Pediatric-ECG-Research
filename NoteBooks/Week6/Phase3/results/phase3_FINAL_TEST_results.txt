@@ -1,0 +1,34 @@
+==================================================
+PHASE 3 FINAL BLIND TEST EVALUATION
+==================================================
+
+Model: Phase 2 ResNet-1D (No retraining)
+Checkpoint Used: /home/souhit/Documents/Research/Pediatric_ECG/NoteBooks/Week6/Phase2/checkpoints/phase2_resnet_best.pth
+Windows Config: 5
+Aggregation Config: MAX
+
+--- Windows Statistics ---
+Total TEST records: 2078
+Total windows processed: 10386
+Average windows per record: 5.00
+Runtime: 7.63 seconds
+
+--- Test Metrics vs Validation --- 
+Metric          | Validation   | Test
+---------------------------------------------
+ROC-AUC         | 0.8511       | 0.8455
+PR-AUC          | 0.9614       | 0.9605
+Accuracy        | ---          | 0.7806
+Sensitivity     | ---          | 0.7961
+Specificity     | ---          | 0.7089
+F1 Score        | ---          | 0.8563
+
+--- Detailed Classification Output ---
+Precision: 0.9264
+Recall:    0.7961
+Confusion Matrix:
+[[ 263  108]
+ [ 348 1359]]
+
+--- Final Conclusion ---
+Phase 1-3 testing complete. The model configuration is now entirely frozen.

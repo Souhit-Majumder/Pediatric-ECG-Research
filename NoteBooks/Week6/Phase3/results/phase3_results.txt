@@ -1,0 +1,43 @@
+==================================================
+PHASE 3 RESULTS (Validation Set Only for config selection)
+==================================================
+
+Model: Phase 2 ResNet-1D (No retraining)
+Checkpoint Used: /home/souhit/Documents/Research/Pediatric_ECG/NoteBooks/Week6/Phase2/checkpoints/phase2_resnet_best.pth
+Temporal Strategy: Deterministic Multi-Window Inference
+Requested Number of Windows (NUM_WINDOWS): 3
+Aggregation Method: Mean Probability per record
+
+--- Windows Statistics ---
+Total validation records: 2169
+Total windows processed: 6495
+Average windows per record: 2.99
+Minimum windows per record: 1
+Maximum windows per record: 3
+Records with 1 window (required padding/exact 10s): 6
+Records with 2 windows: 0
+Records with 3 windows: 2163
+
+--- Validation Metrics ---
+ROC-AUC:     0.8479
+PR-AUC:      0.9594
+Accuracy:    0.7649
+Precision:   0.9428
+Recall:      0.7568
+F1 Score:    0.8396
+Confusion Matrix:
+[[ 324   81]
+ [ 429 1335]]
+
+--- Comparison vs Previous Phases ---
+Phase 1 ROC-AUC: 0.8381
+Phase 2 ROC-AUC: 0.8417
+Phase 3 ROC-AUC: 0.8479
+
+Delta Phase 3 vs Phase 2: +0.0062
+
+--- Runtime ---
+Inference Time: 4.53 seconds
+
+--- Conclusion ---
+Phase 3 > Phase 2: Multiple temporal regions contain complementary information. Aggregation improved performance.

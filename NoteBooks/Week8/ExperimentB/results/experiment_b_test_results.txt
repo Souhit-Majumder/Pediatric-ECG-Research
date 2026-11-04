@@ -1,0 +1,6 @@
+Experiment B Test Performance
+ROC-AUC: 0.8420
+PR-AUC: 0.9601
+Sensitivity: 0.8260
+Specificity: 0.6577
+F1 Score: 0.8693

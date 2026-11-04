@@ -1,0 +1,63 @@
+{
+  "candidates": {
+    "weighted_bce": {
+      "pos_weight_rule": "min(negative/positive training records,20)",
+      "values": {
+        "I40.0": 20.0,
+        "I40.9": 20.0,
+        "I51.4": 20.0,
+        "I42.0": 20.0,
+        "I42.2": 20.0,
+        "I42.9": 20.0,
+        "Q24.8": 20.0,
+        "M30.3": 20.0,
+        "Q21.0": 12.752420425415039,
+        "Q21.1": 7.586355686187744,
+        "Q21.2": 20.0,
+        "Q21.3": 20.0,
+        "Q22.1": 20.0,
+        "Q25.0": 20.0,
+        "Q25.6": 20.0,
+        "I37.0": 20.0
+      }
+    },
+    "asymmetric_loss": {
+      "gamma_pos": 0,
+      "gamma_neg": 4,
+      "negative_probability_clip": 0.05
+    }
+  },
+  "architecture": "NoteBooks/Week5/models.py:ResNet1D(num_classes=16), random init",
+  "baseline": "new work/Week7/experimental/multilabel_base16/resnet1d_base16_best.pth",
+  "seed": 42,
+  "split": "sorted patient IDs, seed42, floor 70/15/15",
+  "input_samples": 5000,
+  "lead_order": [
+    "I",
+    "II",
+    "III",
+    "AVR",
+    "AVL",
+    "AVF",
+    "V1",
+    "V2",
+    "V3",
+    "V4",
+    "V5",
+    "V6"
+  ],
+  "batch_size": 32,
+  "optimizer": "Adam",
+  "learning_rate": 0.0003,
+  "weight_decay": 0.0001,
+  "max_epochs": 8,
+  "patience": 3,
+  "checkpoint_rule": "minimum common unweighted validation BCE; delta 1e-5",
+  "thresholds_reported": [
+    0.5,
+    0.2
+  ],
+  "test_labels_or_waveforms_accessed": false,
+  "torch": "2.6.0+cu124",
+  "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU"
+}

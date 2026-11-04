@@ -1,0 +1,33 @@
+{
+  "strategy": "uniform random 5000-sample training window; first-window checkpoint selection",
+  "secondary_inference": "three deterministic windows at start, middle, end; mean or max probability",
+  "architecture": "NoteBooks/Week5/models.py:ResNet1D(num_classes=16), random init",
+  "seed": 42,
+  "split": "sorted patient IDs, seed42, floor 70/15/15",
+  "input_samples": 5000,
+  "lead_order": [
+    "I",
+    "II",
+    "III",
+    "AVR",
+    "AVL",
+    "AVF",
+    "V1",
+    "V2",
+    "V3",
+    "V4",
+    "V5",
+    "V6"
+  ],
+  "batch_size": 32,
+  "optimizer": "Adam",
+  "learning_rate": 0.0003,
+  "weight_decay": 0.0001,
+  "max_epochs": 8,
+  "patience": 3,
+  "checkpoint_rule": "minimum first-window unweighted validation BCE; delta 1e-5",
+  "threshold": 0.5,
+  "test_labels_or_waveforms_accessed": false,
+  "torch": "2.6.0+cu124",
+  "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU"
+}

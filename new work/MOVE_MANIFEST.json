@@ -1,0 +1,33 @@
+{
+  "physical_root": "new work",
+  "compatibility_links": {
+    "NoteBooks/Week4/Week4_CVD_Binary_CNN.ipynb": "new work/Week4/Week4_CVD_Binary_CNN.ipynb",
+    "NoteBooks/Week4/Week4_CVD_Binary_CNN_best.pth": "new work/Week4/Week4_CVD_Binary_CNN_best.pth",
+    "NoteBooks/Week5/Week5_Disease_CNN_Comparison_GradCAM.ipynb": "new work/Week5/Week5_Disease_CNN_Comparison_GradCAM.ipynb",
+    "NoteBooks/Week5/disease_labelled": "new work/Week5/disease_labelled",
+    "NoteBooks/Week5/experimental": "new work/Week5/experimental"
+  },
+  "file_sha256": {
+    "new work/Week4/Week4_CVD_Binary_CNN.ipynb": "00a4d0c9eb56c2c3e0be58e1ad59fcc41c2280d14b1c3625ec7323517d26b89d",
+    "new work/Week4/Week4_CVD_Binary_CNN_best.pth": "d562e0a409c11775006f3bc75a2bf0b2b1366d03f2cff99c12ab870578f9448d",
+    "new work/Week5/Week5_Disease_CNN_Comparison_GradCAM.ipynb": "45a8fc3f889890eb577a2b8d1368fea627bb6bd1b39035cf84efeec61dc2f201",
+    "new work/Week5/disease_labelled/gradcam_outcomes.png": "3240074913a39309c4ec620eff8bbafe558a8ddc63d3391fb1749f276ca00b10",
+    "new work/Week5/disease_labelled/gradcam_leadII_zooms.png": "33f709e7aef4346a0763b80969c37c63bc23175d751deb86e85af5b1c113e493",
+    "new work/Week5/disease_labelled/resnet_weighted_best.pth": "ec1f53ce33c88a92e8a8155cdd8b79c4feafa8321f306ea0c627872bf8904935",
+    "new work/Week5/disease_labelled/resnet_unweighted_best.pth": "50e5903399b071870dfafc6cdd6827a94ff2323c896c1935c36cf13acb4e9c9d",
+    "new work/Week5/experimental/selected_experimental_best.pth": "73f8822a3890b1000eb5e5e3d009b1af52e9f196ce8bcf9e7680bac2107feccf",
+    "new work/Week5/experimental/validation_confusion_matrices.png": "2b900702cd2c9e353878fda1db51c0a0f0b73a3229708fff116e5324e1f9312a",
+    "new work/Week5/experimental/multiscale_resnet_history.csv": "74a0a60f85a55e88eb9f6dbd03ef8e46b22e39bc3c9ea6eee0d9ca1c44fb4801",
+    "new work/Week5/experimental/multiscale_resnet_best.pth": "73f8822a3890b1000eb5e5e3d009b1af52e9f196ce8bcf9e7680bac2107feccf",
+    "new work/Week5/experimental/validation_subgroups.csv": "d17c9d8f2db2fc495bf0d84662e99056106c293a07c198e188a8921e51695d56",
+    "new work/Week5/experimental/Architecture_Comparison.ipynb": "3114138f72640838d73455df6e138d7645d348d3d80e86969e682996e3110f6d",
+    "new work/Week5/experimental/compact_dilated_tcn_history.csv": "5564fffdd718e124e4da27300dc36f3f8ab518d6bdb101c529f423f2755b1830",
+    "new work/Week5/experimental/selection.json": "fafdc30aaf45bbf7f8be36e12f26975e34eb907cbaabb1c6c3c91a957932c23a",
+    "new work/Week5/experimental/validation_roc_pr.png": "ad852e9dd6d46d1939174483b82932c09589514ecd9faf6b32142483a61d59aa",
+    "new work/Week5/experimental/validation_predictions.csv": "8dec0500231fd1c688fa65527834ac6b28b6baf242048c366391cfe0d134e8b4",
+    "new work/Week5/experimental/paired_patient_bootstrap_differences.csv": "36cf083bed2f71536bf53b8229d48237414ca96a8a0112f88e2fe2eca56cbb12",
+    "new work/Week5/experimental/validation_comparison.csv": "ab5c1d0eb163f45dbef0f21e969ea95ea8f70d7d0684ccbf4de7b84a72aa58ed",
+    "new work/Week5/experimental/cohort_summary.csv": "5fd2f77337529ba98daefe53e9061ee137668244ca0646d0f875afc8768847df",
+    "new work/Week5/experimental/compact_dilated_tcn_best.pth": "2236a2f273e1362a2582e487802cd5dacb8a4909d6d897c55f99681b26384e27"
+  }
+}

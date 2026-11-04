@@ -1,0 +1,58 @@
+{
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "seed_for_patient_split": 42,
+  "epochs_max": 8,
+  "patience": 3,
+  "batch_size": 32,
+  "learning_rate": 0.0003,
+  "weight_decay": 0.0001,
+  "loss": "unweighted cross entropy",
+  "checkpoint_rule": "minimum validation cross entropy, improvement > 1e-5",
+  "threshold": 0.5,
+  "input_samples": 5000,
+  "fs": 500,
+  "lead_order": [
+    "I",
+    "II",
+    "III",
+    "AVR",
+    "AVL",
+    "AVF",
+    "V1",
+    "V2",
+    "V3",
+    "V4",
+    "V5",
+    "V6"
+  ],
+  "selected_codes": [
+    "(F) I40.0",
+    "(FO) Q21.1",
+    "(OSD) Q21.1",
+    "(V) I40.0",
+    "I37.0",
+    "I40.9",
+    "I42.0",
+    "I42.2",
+    "I42.9",
+    "I51.4",
+    "M30.3",
+    "Q21.0",
+    "Q21.1",
+    "Q21.2",
+    "Q21.3",
+    "Q22.1",
+    "Q24.8",
+    "Q25.0",
+    "Q25.6"
+  ],
+  "architecture_sources": {
+    "resnet1d": "NoteBooks/Week5/models.py:ResNet1D",
+    "multiscale_resnet": "NoteBooks/Week8/ExperimentB/models.py:MultiScaleResNet1D"
+  },
+  "test_evaluated": false
+}
